@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Yaygın Akıllı Kurs Öneri Modülü</title>
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --panel: #ffffff;
+      --soft: #eef4ff;
+      --primary: #1d4ed8;
+      --primary-2: #2563eb;
+      --text: #18202f;
+      --muted: #64748b;
+      --line: #dbe5f1;
+      --ok: #0f766e;
+      --warn: #b45309;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f7f9fc 0%, #eef4fb 100%);
+      color: var(--text);
+    }
+
+    .app {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+      color: white;
+      padding: 28px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 980px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.45fr 0.95fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .flow-card {
+      padding: 24px;
+    }
+
+    .side {
+      display: grid;
+      gap: 18px;
+      position: sticky;
+      top: 18px;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .subtle {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: #e7edf8;
+      border-radius: 999px;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+      transition: width .35s ease;
+    }
+
+    .step-chip {
+      background: var(--soft);
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .question-box {
+      background: linear-gradient(180deg, #fdfefe 0%, #f7faff 100%);
+      border: 1px solid #e6eefb;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 10px;
+    }
+
+    .question-kind {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #eef4ff;
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .question-text {
+      font-size: 26px;
+      line-height: 1.3;
+      margin: 0 0 10px;
+      font-weight: 800;
+    }
+
+    .question-help {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option-btn {
+      text-align: left;
+      width: 100%;
+      border: 1px solid #d7e4f5;
+      background: white;
+      padding: 16px 16px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .option-btn:hover {
+      border-color: #8cb4ff;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.08);
+    }
+
+    .option-btn strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .option-btn span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      display: block;
+    }
+
+    .multi-select-note {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      border: 1px solid #d9e5f5;
+      background: white;
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: .2s ease;
+    }
+
+    .pill.active {
+      background: #eaf2ff;
+      color: #1748c5;
+      border-color: #7aa8ff;
+      font-weight: 700;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      background: #edf2fb;
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--line);
+    }
+
+    .hidden { display: none !important; }
+
+    .summary-card, .logic-card, .result-card {
+      padding: 20px;
+    }
+
+    .meta-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .meta-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: #fbfdff;
+    }
+
+    .meta-item .k {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--muted);
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .meta-item .v {
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      background: #eef4ff;
+      color: #2154d2;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .logic-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .logic-item {
+      border-left: 4px solid #7aa8ff;
+      padding: 10px 12px;
+      background: #f8fbff;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .result-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .course-card {
+      border: 1px solid #dce8f6;
+      border-radius: 18px;
+      padding: 16px;
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    }
+
+    .course-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .course-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .score {
+      background: #eafbf7;
+      color: var(--ok);
+      font-weight: 800;
+      font-size: 13px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      white-space: nowrap;
+    }
+
+    .course-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 12px;
+    }
+
+    .chip {
+      background: #eff5ff;
+      color: #3058b7;
+      font-size: 12px;
+      padding: 7px 9px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .reason-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .empty-state {
+      border: 1px dashed #b9c8de;
+      background: #fafcff;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .side {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="hero">
+      <h1>E-Yaygın Akıllı Kurs Öneri Modülü — Gelişmiş Dallanmalı HTML Prototipi</h1>
+      <p>
+        Bu prototip; kullanıcıyı yormadan, art arda rehberlik eden soru yapısıyla en uygun E-Yaygın kurslarına yönlendirmek için hazırlandı.
+        Akışta önce ana amaç belirlenir, sonra ilgi alanı, beceri tipi, seviye, katılım biçimi ve son öncelik üzerinden dallanma yapılır.
+        Sorular sabit bir form gibi ilerlemez; verilen cevaba göre daha anlamlı yeni soru açılır ve toplam akış kontrollü tutulur.
+      </p>
+    </section>
+
+    <div class="layout">
+      <section class="card flow-card">
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
+          <div class="step-chip" id="stepChip">Hazır</div>
+        </div>
+
+        <div id="flowIntro">
+          <h2 class="section-title">Akış nasıl çalışır?</h2>
+          <p class="subtle">
+            Sistem önce ana niyeti anlamaya çalışır. Sonra sadece gerekli olduğu kadar soru sorar. Her cevap, kurs önerilerinin puanını etkiler.
+            Sağ tarafta cevap özeti, etiketler ve öneri mantığı oluşur. Alt tarafta da örnek kurslar gerçek sisteme bağlanacakmış gibi listelenir.
+          </p>
+          <div class="actions">
+            <button type="button" class="btn primary" id="startBtn">Anketi Başlat</button>
+            <button type="button" class="btn ghost" id="demoJobBtn">Demo: İş odaklı profil</button>
+            <button type="button" class="btn ghost" id="demoHobbyBtn">Demo: Hobi odaklı profil</button>
+          </div>
+        </div>
+
+        <div id="questionContainer" class="hidden"></div>
+
+        <div id="resultContainer" class="hidden result-card">
+          <div class="result-header">
+            <div>
+              <h2 class="section-title" style="margin-bottom:6px;">Öneri Sonuçları</h2>
+              <div class="subtle">Aşağıdaki kartlar örnek veriyle üretilmiştir. Gerçek projede bunlar E-Yaygın katalog, açık kurs, il/ilçe, kontenjan ve başvuru verisiyle beslenecektir.</div>
+            </div>
+            <div class="actions" style="margin-top:0;">
+              <button type="button" class="btn ghost" id="restartBtn">Baştan Başla</button>
+            </div>
+          </div>
+          <div id="resultGrid" class="result-grid"></div>
+          <div class="footer-note">
+            Not: Bu prototipte kurs adları ve alanları örnek mantık göstermek için modellenmiştir. Gerçek uygulamada her kartta başvuru durumu, kontenjan, başlama tarihi, kurum, ilçe ve açıklama da dinamik gelecektir.
+          </div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="card summary-card">
+          <h3 class="section-title">Kullanıcı Özeti</h3>
+          <div class="subtle">Sorular ilerledikçe burada kullanıcı profili şekillenir.</div>
+          <div id="summaryList" class="meta-list">
+            <div class="empty-state">Henüz cevap yok. Akış başladığında seçilen amaç, alan, seviye ve tercih bilgileri burada görünür.</div>
+          </div>
+          <div id="tagBox" class="tags"></div>
+        </section>
+
+        <section class="card logic-card">
+          <h3 class="section-title">Öneri Mantığı</h3>
+          <div class="subtle">Sistem neden bu kursları öne çıkardığını açık şekilde gösterebilir.</div>
+          <div id="logicList" class="logic-list">
+            <div class="empty-state">Önce birkaç soru cevaplandığında burada puanlamayı etkileyen mantık maddeleri oluşur.</div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const courses = [
+      {
+        id: 1,
+        title: 'Bilgisayar İşletmenliği (Temel Ofis Uygulamaları)',
+        area: 'digital_office',
+        goalFit: ['job', 'upskill', 'foundation'],
+        aptitudeFit: ['admin', 'technical'],
+        levelFit: ['none', 'basic'],
+        modalityFit: ['online', 'f2f'],
+        priorityFit: ['fast', 'certificate', 'online'],
+        city: 'genel',
+        modality: 'Karma',
+        duration: '160 saat',
+        type: 'Temel Dijital Beceri',
+        certificate: true,
+        reasons: ['Ofis ve dijital beceriler için güçlü başlangıç sunar.', 'İşe giriş ve temel beceri ihtiyacıyla iyi eşleşir.', 'Başlangıç seviyesindeki kullanıcılar için uygundur.']
+      },
+      {
+        id: 2,
+        title: 'İngilizce A1 Seviyesi',
+        area: 'language',
+        goalFit: ['job', 'hobby', 'foundation'],
+        aptitudeFit: ['people', 'admin'],
+        levelFit: ['none', 'basic'],
+        modalityFit: ['online', 'f2f'],
+        priorityFit: ['online', 'certificate'],
+        city: 'genel',
+        modality: 'Uzaktan / Yüz yüze',
+        duration: '120 saat',
+        type: 'Yabancı Dil',
+        certificate: true,
+        reasons: ['Temel dil ihtiyacı için doğrudan uygundur.', 'Başlangıç seviyesine uyumlu ilerler.', 'İstihdam ve kişisel gelişim amaçları için sık tercih edilir.']
+      },
+      {
+        id: 3,
+        title: 'Web Tasarımı Geliştirme',
+        area: 'digital_code',
+        goalFit: ['job', 'upskill'],
+        aptitudeFit: ['technical', 'creative'],
+        levelFit: ['basic', 'intermediate'],
+        modalityFit: ['online'],
+        priorityFit: ['online', 'progress'],
+        city: 'genel',
+        modality: 'Uzaktan',
+        duration: '220 saat',
+        type: 'Bilişim / Yazılım',
+        certificate: true,
+        reasons: ['Dijital üretim ve kodlama odağı taşır.', 'İş bulma veya mevcut işte gelişme amacına uygundur.', 'Çevrim içi katılım tercih eden kullanıcı için avantajlıdır.']
+      },
+      {
+        id: 4,
+        title: 'Grafik ve Vektörel Çizim',
+        area: 'art_visual',
+        goalFit: ['hobby', 'upskill', 'job'],
+        aptitudeFit: ['creative'],
+        levelFit: ['basic', 'intermediate'],
+        modalityFit: ['online', 'f2f'],
+        priorityFit: ['practice', 'progress'],
+        city: 'genel',
+        modality: 'Karma',
+        duration: '180 saat',
+        type: 'Tasarım',
+        certificate: true,
+        reasons: ['Yaratıcı üretim isteğini karşılar.', 'Tasarım ve görsel içerik alanına yönelen kullanıcı için uygundur.', 'Hobi ile mesleki gelişim arasında köprü olabilir.']
+      },
+      {
+        id: 5,
+        title: 'Gitar Eğitimi (Başlangıç)',
+        area: 'art_music',
+        goalFit: ['hobby', 'social'],
+        aptitudeFit: ['creative'],
+        levelFit: ['none', 'basic'],
+        modalityFit: ['f2f'],
+        priorityFit: ['nearby', 'practice'],
+        city: 'yerel',
+        modality: 'Yüz yüze',
+        duration: '96 saat',
+        type: 'Müzik',
+        certificate: false,
+        reasons: ['Kişisel ilgi ve sanatsal üretim hedefi için uygundur.', 'Uygulama ağırlıklı ilerler.', 'Hobi amaçlı kurs arayan kullanıcıyı doğrudan karşılar.']
+      },
+      {
+        id: 6,
+        title: 'Aşçı Yardımcısı',
+        area: 'service_food',
+        goalFit: ['job', 'upskill'],
+        aptitudeFit: ['manual', 'people'],
+        levelFit: ['none', 'basic', 'practical'],
+        modalityFit: ['f2f'],
+        priorityFit: ['certificate', 'practice', 'nearby'],
+        city: 'yerel',
+        modality: 'Yüz yüze',
+        duration: '450 saat',
+        type: 'Yiyecek İçecek Hizmetleri',
+        certificate: true,
+        reasons: ['İşe dönük ve uygulama odaklı güçlü bir rotadır.', 'Belge hedefi olan kullanıcı için anlamlıdır.', 'Atölye ve yüz yüze katılım isteyen profillere uygundur.']
+      },
+      {
+        id: 7,
+        title: 'Çocuk Gelişimi ve Etkinlikleri',
+        area: 'family_child',
+        goalFit: ['family', 'job', 'hobby'],
+        aptitudeFit: ['people'],
+        levelFit: ['none', 'basic'],
+        modalityFit: ['online', 'f2f'],
+        priorityFit: ['certificate', 'online'],
+        city: 'genel',
+        modality: 'Karma',
+        duration: '200 saat',
+        type: 'Aile / Çocuk',
+        certificate: true,
+        reasons: ['Çocuk ve aile odaklı hedeflerle kuvvetli eşleşir.', 'Veli veya aile odaklı kullanıcı için anlamlıdır.', 'Temel seviyeden başlanabilir.']
+      },
+      {
+        id: 8,
+        title: 'Dikiş Makineci',
+        area: 'maker_craft',
+        goalFit: ['job', 'hobby'],
+        aptitudeFit: ['manual'],
+        levelFit: ['none', 'basic', 'practical'],
+        modalityFit: ['f2f'],
+        priorityFit: ['practice', 'nearby'],
+        city: 'yerel',
+        modality: 'Yüz yüze',
+        duration: '320 saat',
+        type: 'El Sanatları / Üretim',
+        certificate: true,
+        reasons: ['El becerisi ve üretim eğilimi gösteren kullanıcıya uygundur.', 'Uygulama yoğun eğitim arayanlara hitap eder.', 'Yerel merkezlerde açılmaya elverişlidir.']
+      },
+      {
+        id: 9,
+        title: 'İlk Yardım Farkındalık Eğitimi',
+        area: 'health_safety',
+        goalFit: ['foundation', 'social', 'upskill'],
+        aptitudeFit: ['people', 'physical'],
+        levelFit: ['none', 'basic'],
+        modalityFit: ['online', 'f2f'],
+        priorityFit: ['certificate', 'fast'],
+        city: 'genel',
+        modality: 'Karma',
+        duration: '18 saat',
+        type: 'Sağlık / Güvenlik',
+        certificate: true,
+        reasons: ['Kısa sürede tamamlanabilir.', 'Temel beceri ve toplumsal fayda amacı taşıyan kullanıcılar için uygundur.', 'Sertifika beklentisini karşılayabilir.']
+      },
+      {
+        id: 10,
+        title: 'Arıcılık',
+        area: 'maker_field',
+        goalFit: ['hobby', 'job', 'social'],
+        aptitudeFit: ['manual', 'physical'],
+        levelFit: ['none', 'basic', 'practical'],
+        modalityFit: ['f2f'],
+        priorityFit: ['practice', 'nearby'],
+        city: 'yerel',
+        modality: 'Yüz yüze',
+        duration: '84 saat',
+        type: 'Tarım / Uygulama',
+        certificate: true,
+        reasons: ['Uygulamalı üretim isteğiyle eşleşir.', 'Hobi ile gelir getirici beceri arasında köprü kurabilir.', 'Sahada öğrenmeyi seven kullanıcılar için uygundur.']
+      },
+      {
+        id: 11,
+        title: 'Bilgisayar Destekli Muhasebe',
+        area: 'digital_office',
+        goalFit: ['job', 'upskill'],
+        aptitudeFit: ['admin'],
+        levelFit: ['basic', 'intermediate'],
+        modalityFit: ['online', 'f2f'],
+        priorityFit: ['certificate', 'progress'],
+        city: 'genel',
+        modality: 'Karma',
+        duration: '280 saat',
+        type: 'Ofis / Muhasebe',
+        certificate: true,
+        reasons: ['Düzen, kayıt ve ofis odaklı profille iyi uyuşur.', 'İşe dönük pratik kullanım sunar.', 'Temel dijital bilgi sonrası ilerleme rotası olabilir.']
+      },
+      {
+        id: 12,
+        title: 'Türk İşaret Dili (Başlangıç)',
+        area: 'language_social',
+        goalFit: ['social', 'hobby', 'upskill'],
+        aptitudeFit: ['people'],
+        levelFit: ['none', 'basic'],
+        modalityFit: ['f2f', 'online'],
+        priorityFit: ['certificate', 'nearby'],
+        city: 'genel',
+        modality: 'Karma',
+        duration: '120 saat',
+        type: 'Dil / Sosyal Katılım',
+        certificate: true,
+        reasons: ['İnsanlarla çalışma ve sosyal katılım motivasyonunu destekler.', 'Başlangıç düzeyine uygundur.', 'Toplumsal fayda motivasyonu taşıyan kullanıcı için anlamlıdır.']
+      }
+    ];
+
+    const state = {
+      started: false,
+      currentIndex: 0,
+      answers: {},
+      history: [],
+      selectedAreas: [],
+      finished: false
+    };
+
+    const flow = [
+      {
+        id: 'goal',
+        type: 'single',
+        badge: 'Ana Soru 1',
+        text: 'Bugün kurs aramanızın ana nedeni nedir?',
+        help: 'Bu cevap sistemin ilk yönünü belirler. Sonraki sorular buna göre dallanacaktır.',
+        options: [
+          { value: 'job', title: 'İş bulmak istiyorum', desc: 'Mesleki veya işe girişte avantaj sağlayacak kurslar arıyorum.' },
+          { value: 'upskill', title: 'Mevcut işimde ilerlemek istiyorum', desc: 'Yeni araç, yeni seviye veya belge ihtiyacım var.' },
+          { value: 'hobby', title: 'Hobi / kişisel gelişim için istiyorum', desc: 'İlgi duyduğum bir alanı öğrenmek istiyorum.' },
+          { value: 'foundation', title: 'Temel beceri kazanmak istiyorum', desc: 'Dijital, dil veya günlük yaşam becerisi gibi bir başlangıç arıyorum.' },
+          { value: 'family', title: 'Çocuğum / ailem için uygun bir alan arıyorum', desc: 'Aile veya çocuk gelişimi ekseninde yönlendirme istiyorum.' },
+          { value: 'social', title: 'Sosyal katılım / iyi oluş için arıyorum', desc: 'Beni hayata, topluma veya aktif yaşama bağlayacak kurs arıyorum.' }
+        ]
+      },
+      {
+        id: 'goal_detail',
+        type: 'single_dynamic',
+        badge: 'Takip Sorusu',
+        text: (s) => {
+          const goal = s.answers.goal;
+          return {
+            job: 'Nasıl bir işe veya mesleki yöne yakın hissediyorsunuz?',
+            upskill: 'Gelişmek istediğiniz taraf hangisi?',
+            hobby: 'Bu ilginizi nasıl yaşamak istersiniz?',
+            foundation: 'Hangi temel beceriye daha çok ihtiyaç duyuyorsunuz?',
+            family: 'Aşağıdakilerden hangisi sizin için daha yakın?',
+            social: 'Hangi tür sosyal fayda veya iyi oluş sizi daha çok çeker?'
+          }[goal] || 'Detayı seçin';
+        },
+        help: 'Bu soru ana amacın alt yönünü netleştirir. Sadece ilgili seçenekler gösterilir.',
+        options: (s) => {
+          const map = {
+            job: [
+              { value: 'job_office', title: 'Ofis / bilgisayar destekli işler', desc: 'Düzen, veri, evrak, bilgisayar ve idari işler.' },
+              { value: 'job_technical', title: 'Teknik / dijital işler', desc: 'Bilişim, teknik sistem, yazılım veya dijital üretim.' },
+              { value: 'job_service', title: 'Hizmet / mutfak / bakım işleri', desc: 'Uygulama ve iş pratiği ağırlıklı işler.' },
+              { value: 'job_manual', title: 'El becerisi / üretim işleri', desc: 'Atölye, üretim, zanaat veya saha uygulamaları.' }
+            ],
+            upskill: [
+              { value: 'upskill_tool', title: 'Yeni araç ve program öğrenmek', desc: 'Bilgisayar, yazılım, ofis veya dijital araçlar.' },
+              { value: 'upskill_certificate', title: 'Belge / sertifika ile güçlenmek', desc: 'İşimde daha güçlü görünmek veya resmi destek almak.' },
+              { value: 'upskill_specialize', title: 'Alanımda seviye yükseltmek', desc: 'Temelden ileriye veya orta seviyeden üst seviyeye çıkmak.' },
+              { value: 'upskill_side', title: 'Yan beceri kazanmak', desc: 'Mevcut alanıma ek fayda sağlayacak yeni beceriler.' }
+            ],
+            hobby: [
+              { value: 'hobby_music', title: 'Müzik / icra', desc: 'Enstrüman, ritim, sahne veya icra odaklı alanlar.' },
+              { value: 'hobby_art', title: 'Sanat / tasarım / görsel üretim', desc: 'Çizim, tasarım, görsel anlatım, el becerisi.' },
+              { value: 'hobby_craft', title: 'El işi / üretim / zanaat', desc: 'Üreterek rahatladığım alanlar.' },
+              { value: 'hobby_nature', title: 'Doğa / uygulama / saha', desc: 'Tarım, üretim veya sahada öğrenme temelli alanlar.' }
+            ],
+            foundation: [
+              { value: 'foundation_digital', title: 'Temel dijital beceriler', desc: 'Bilgisayar, internet, dosya, ofis araçları.' },
+              { value: 'foundation_language', title: 'Temel yabancı dil', desc: 'Günlük veya iş hayatında kullanmak için dil.' },
+              { value: 'foundation_life', title: 'Günlük yaşamı destekleyen beceriler', desc: 'Hayatı kolaylaştıracak temel bilgi ve farkındalıklar.' },
+              { value: 'foundation_safety', title: 'Sağlık / güvenlik / farkındalık', desc: 'İlk yardım, güvenlik, temel korunma alanları.' }
+            ],
+            family: [
+              { value: 'family_child', title: 'Çocuk gelişimi / aile desteği', desc: 'Çocuğu destekleyen veya aileye katkı sağlayan alanlar.' },
+              { value: 'family_learning', title: 'Evde öğrenme / gelişim ortamı', desc: 'Öğrenmeyi destekleyen aile içi beceriler.' },
+              { value: 'family_skill', title: 'Aile için işe yarar üretim becerileri', desc: 'Ev ekonomisi, mutfak veya günlük üretim becerileri.' }
+            ],
+            social: [
+              { value: 'social_people', title: 'İnsanlarla daha güçlü iletişim', desc: 'Toplulukla bağ kurmak ve iletişim becerisi kazanmak.' },
+              { value: 'social_activity', title: 'Aktif ve üretken bir uğraş', desc: 'Evde kalmadan aktif olacağım alanlar.' },
+              { value: 'social_support', title: 'Toplumsal fayda sağlayan alanlar', desc: 'Başkasına dokunan veya destek sağlayan beceriler.' }
+            ]
+          };
+          return map[s.answers.goal] || [];
+        }
+      },
+      {
+        id: 'area',
+        type: 'multi',
+        badge: 'Ana Soru 2',
+        text: 'En çok hangi alanlara ilgi duyuyorsunuz?',
+        help: 'En fazla iki alan seçin. Bu seçim öneri puanında güçlü ağırlığa sahiptir.',
+        limit: 2,
+        options: [
+          { value: 'digital_office', title: 'Bilgisayar / ofis / dijital araçlar' },
+          { value: 'digital_code', title: 'Yazılım / web / teknik dijital alanlar' },
+          { value: 'language', title: 'Yabancı dil' },
+          { value: 'art_visual', title: 'Tasarım / görsel üretim' },
+          { value: 'art_music', title: 'Müzik / sahne / icra' },
+          { value: 'maker_craft', title: 'El becerisi / üretim / zanaat' },
+          { value: 'maker_field', title: 'Doğa / tarım / saha uygulamaları' },
+          { value: 'service_food', title: 'Yiyecek içecek / hizmet alanları' },
+          { value: 'family_child', title: 'Aile / çocuk gelişimi' },
+          { value: 'health_safety', title: 'Sağlık / güvenlik / ilk yardım' },
+          { value: 'language_social', title: 'İletişim / sosyal dil alanları' }
+        ]
+      },
+      {
+        id: 'aptitude',
+        type: 'single',
+        badge: 'Ana Soru 3',
+        text: 'Kendinizi hangi tür iş ve öğrenme biçimine daha yakın hissediyorsunuz?',
+        help: 'Bu cevap, aynı alan içindeki en uygun kurs tipini seçmeye yardım eder.',
+        options: [
+          { value: 'people', title: 'İnsanlarla çalışmak', desc: 'İletişim, destek, anlatma, rehberlik.' },
+          { value: 'technical', title: 'Bilgisayar ve teknik sistemlerle çalışmak', desc: 'Dijital veya teknik çözüm üretmek.' },
+          { value: 'manual', title: 'El becerisi ve üretim', desc: 'Yapmak, üretmek, uygulamak, montajlamak.' },
+          { value: 'creative', title: 'Yaratıcı ve sanatsal işler', desc: 'Tasarlamak, icra etmek, estetik üretmek.' },
+          { value: 'admin', title: 'Düzenleme / kayıt / ofis tipi işler', desc: 'Plan, düzen, veri, takip süreçleri.' },
+          { value: 'physical', title: 'Hareketli / sahada / fiziksel etkinlik', desc: 'Uygulama, alan, saha, aktif çalışma.' }
+        ]
+      },
+      {
+        id: 'level',
+        type: 'single',
+        badge: 'Ana Soru 4',
+        text: 'Bu alandaki mevcut seviyeniz nedir?',
+        help: 'Sistem bunu geçmiş öğrenme bilgisiyle birlikte değerlendirebilir.',
+        options: [
+          { value: 'none', title: 'Hiç bilmiyorum', desc: 'Sıfırdan, sade bir başlangıç istiyorum.' },
+          { value: 'basic', title: 'Biraz bilgim var', desc: 'Temel kavramlara yabancı değilim.' },
+          { value: 'intermediate', title: 'Orta seviyedeyim', desc: 'Artık bir üst seviyeye çıkmak istiyorum.' },
+          { value: 'practical', title: 'Pratik yaptım / uyguladım', desc: 'Evde, işte veya okulda deneyimim oldu.' },
+          { value: 'advanced', title: 'İleriye yakınım', desc: 'Uzmanlaşma veya belge tamamlama istiyorum.' }
+        ]
+      },
+      {
+        id: 'modality',
+        type: 'single',
+        badge: 'Ana Soru 5',
+        text: 'Kursu nasıl almak istersiniz?',
+        help: 'Gerçek sistemde bu cevap il, ilçe, açık kurs ve takvim verileriyle birleşecektir.',
+        options: [
+          { value: 'f2f', title: 'Yüz yüze ve mümkünse yakın olsun', desc: 'Kuruma giderek öğrenmeyi tercih ederim.' },
+          { value: 'online', title: 'Uzaktan / esnek olsun', desc: 'Evden veya telefondan takip etmek isterim.' },
+          { value: 'practice', title: 'Atölye / uygulama ağırlıklı olsun', desc: 'Uygulama oranı yüksek olsun isterim.' },
+          { value: 'evening', title: 'Akşam / hafta sonu uygun olur', desc: 'Çalışma saatlerime göre esneklik isterim.' },
+          { value: 'nearby', title: 'Yakın lokasyon benim için önemli', desc: 'Ulaşımı kolay bir yerde olsun.' }
+        ]
+      },
+      {
+        id: 'priority',
+        type: 'single',
+        badge: 'Ana Soru 6',
+        text: 'Sonuç ekranında sizin için en kritik öncelik ne olsun?',
+        help: 'Bu cevap son sıralamayı etkiler.',
+        options: [
+          { value: 'fast', title: 'Hemen başlayabileyim', desc: 'Erken başlayacak veya kısa sürede sonuç verecek kurslar öne çıksın.' },
+          { value: 'certificate', title: 'Belge / sertifika önemli', desc: 'Belgelendirme değeri olan seçenekler üstte olsun.' },
+          { value: 'progress', title: 'Bir üst seviyeye geçeyim', desc: 'İlerleme rotası güçlü olan kursları görmek istiyorum.' },
+          { value: 'practice', title: 'Daha çok uygulama yapayım', desc: 'Pratik yoğun kurslar öncelikli olsun.' },
+          { value: 'nearby', title: 'Yakın seçenekler önce gelsin', desc: 'Lokasyon benim için daha önemli.' },
+          { value: 'online', title: 'Online seçenekler önce gelsin', desc: 'Uzaktan katılabildiklerim daha üstte olsun.' }
+        ]
+      }
+    ];
+
+    const els = {
+      startBtn: document.getElementById('startBtn'),
+      demoJobBtn: document.getElementById('demoJobBtn'),
+      demoHobbyBtn: document.getElementById('demoHobbyBtn'),
+      flowIntro: document.getElementById('flowIntro'),
+      questionContainer: document.getElementById('questionContainer'),
+      resultContainer: document.getElementById('resultContainer'),
+      resultGrid: document.getElementById('resultGrid'),
+      summaryList: document.getElementById('summaryList'),
+      tagBox: document.getElementById('tagBox'),
+      logicList: document.getElementById('logicList'),
+      progressBar: document.getElementById('progressBar'),
+      stepChip: document.getElementById('stepChip'),
+      restartBtn: document.getElementById('restartBtn')
+    };
+
+    function labelMap() {
+      return {
+        goal: 'Ana amaç',
+        goal_detail: 'Amaç detayı',
+        area: 'İlgi alanı',
+        aptitude: 'Beceri eğilimi',
+        level: 'Seviye',
+        modality: 'Katılım biçimi',
+        priority: 'Son öncelik'
+      };
+    }
+
+    function titleFromOption(step, value) {
+      let options = step.options;
+      if (typeof options === 'function') options = options(state);
+      const found = options.find(o => o.value === value);
+      return found ? found.title : value;
+    }
+
+    function safeAlert(message) {
+      if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+        window.alert(message);
+      }
+    }
+
+    function scrollToTop() {
+      try {
+        window.scrollTo(0, 0);
+      } catch (err) { /* noop */ }
+    }
+
+    let _lastTapAt = 0;
+    function handleTap(e) {
+      if (!e || !e.target) return;
+      const now = Date.now();
+      if (now - _lastTapAt < 350) return;
+      const tgt = e.target;
+      const match = (sel) => (tgt.closest ? tgt.closest(sel) : null);
+
+      let hit = true;
+
+      if (match('#startBtn') || match('#restartBtn')) {
+        startFlow();
+      } else if (match('#demoJobBtn')) {
+        loadDemo('job');
+      } else if (match('#demoHobbyBtn')) {
+        loadDemo('hobby');
+      } else if (match('#backBtn')) {
+        goBack();
+      } else if (match('#multiNextBtn')) {
+        const step = flow[state.currentIndex];
+        if (!state.selectedAreas.length) {
+          safeAlert('Lütfen en az bir alan seçin.');
+        } else {
+          handleAnswer(step.id, state.selectedAreas.slice(), step);
+        }
+      } else if (match('.option-btn')) {
+        const el = match('.option-btn');
+        const step = flow[state.currentIndex];
+        if (step && el.dataset && el.dataset.value) {
+          handleAnswer(step.id, el.dataset.value, step);
+        }
+      } else if (match('.pill')) {
+        const el = match('.pill');
+        const step = flow[state.currentIndex];
+        if (step && el.dataset && el.dataset.value) {
+          toggleArea(el.dataset.value, step.limit);
+        }
+      } else if (match('.js-apply')) {
+        safeAlert('Gerçek projede burada E-Yaygın başvuru ekranına geçiş olacak.');
+      } else if (match('.js-detail')) {
+        safeAlert('Gerçek projede burada kurs detay, kontenjan, tarih ve kurum bilgisi açılacak.');
+      } else {
+        hit = false;
+      }
+
+      if (hit) {
+        _lastTapAt = now;
+        if (e.cancelable && e.type === 'touchend') {
+          try { e.preventDefault(); } catch (err) {}
+        }
+      }
+    }
+
+    function startFlow() {
+      state.started = true;
+      state.currentIndex = 0;
+      state.answers = {};
+      state.history = [];
+      state.selectedAreas = [];
+      state.finished = false;
+      els.flowIntro.classList.add('hidden');
+      els.resultContainer.classList.add('hidden');
+      els.questionContainer.classList.remove('hidden');
+      renderStep();
+      updateSummary();
+      updateLogic();
+      updateProgress();
+      scrollToTop();
+    }
+
+    function renderStep() {
+      if (state.currentIndex >= flow.length) {
+        finishFlow();
+        return;
+      }
+
+      const step = flow[state.currentIndex];
+      const badge = step.badge || 'Soru';
+      const text = typeof step.text === 'function' ? step.text(state) : step.text;
+      const help = typeof step.help === 'function' ? step.help(state) : step.help;
+      let html = `
+        <div class="question-box">
+          <div class="question-kind">${badge}</div>
+          <h2 class="question-text">${text}</h2>
+          <p class="question-help">${help || ''}</p>
+      `;
+
+      if (step.type === 'single' || step.type === 'single_dynamic') {
+        const options = typeof step.options === 'function' ? step.options(state) : step.options;
+        html += `<div class="options">`;
+        options.forEach(opt => {
+          html += `
+            <button type="button" class="option-btn" data-value="${opt.value}">
+              <strong>${opt.title}</strong>
+              <span>${opt.desc || ''}</span>
+            </button>
+          `;
+        });
+        html += `</div>`;
+      }
+
+      if (step.type === 'multi') {
+        html += `<div class="pill-grid" id="multiGrid">`;
+        step.options.forEach(opt => {
+          const active = state.selectedAreas.includes(opt.value) ? 'active' : '';
+          html += `<button type="button" class="pill ${active}" data-value="${opt.value}">${opt.title}</button>`;
+        });
+        html += `</div>
+        <div class="multi-select-note">
+          <span>En fazla ${step.limit} seçim yapabilirsiniz.</span>
+          <span>Seçim sayısı: <strong id="multiCount">${state.selectedAreas.length}</strong> / ${step.limit}</span>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn ghost" id="backBtn">Geri</button>
+          <button type="button" class="btn primary" id="multiNextBtn">Devam Et</button>
+        </div>`;
+      } else {
+        html += `<div class="actions"><button type="button" class="btn ghost" id="backBtn">Geri</button></div>`;
+      }
+
+      html += `</div>`;
+      els.questionContainer.innerHTML = html;
+
+      updateProgress();
+    }
+
+    function toggleArea(value, limit) {
+      const idx = state.selectedAreas.indexOf(value);
+      if (idx > -1) {
+        state.selectedAreas.splice(idx, 1);
+      } else {
+        if (state.selectedAreas.length >= limit) {
+          safeAlert(`En fazla ${limit} alan seçebilirsiniz.`);
+          return;
+        }
+        state.selectedAreas.push(value);
+      }
+      renderStep();
+    }
+
+    function handleAnswer(id, value, step) {
+      state.answers[id] = value;
+      state.history = state.history.filter(h => h.id !== id);
+      state.history.push({ id, value, label: labelMap()[id] || id, step });
+      state.currentIndex += 1;
+      updateSummary();
+      updateLogic();
+      renderStep();
+    }
+
+    function goBack() {
+      if (state.currentIndex === 0) return;
+      const prevStep = flow[state.currentIndex - 1];
+      if (prevStep.id === 'area') state.selectedAreas = Array.isArray(state.answers.area) ? [...state.answers.area] : [];
+      delete state.answers[prevStep.id];
+      state.history = state.history.filter(h => h.id !== prevStep.id);
+      state.currentIndex -= 1;
+      updateSummary();
+      updateLogic();
+      renderStep();
+    }
+
+    function updateSummary() {
+      const labels = labelMap();
+      const rows = [];
+      flow.forEach(step => {
+        if (state.answers[step.id] !== undefined) {
+          let val = state.answers[step.id];
+          if (Array.isArray(val)) {
+            val = val.map(v => titleFromOption(step, v)).join(', ');
+          } else {
+            val = titleFromOption(step, val);
+          }
+          rows.push(`<div class="meta-item"><div class="k">${labels[step.id] || step.id}</div><div class="v">${val}</div></div>`);
+        }
+      });
+
+      els.summaryList.innerHTML = rows.length ? rows.join('') : `<div class="empty-state">Henüz cevap yok. Akış başladığında seçilen amaç, alan, seviye ve tercih bilgileri burada görünür.</div>`;
+
+      const tags = buildTags();
+      els.tagBox.innerHTML = tags.length ? tags.map(t => `<span class="tag">${t}</span>`).join('') : '';
+    }
+
+    function buildTags() {
+      const tags = [];
+      const a = state.answers;
+      if (a.goal) tags.push('amaç:' + a.goal);
+      if (a.goal_detail) tags.push('detay:' + a.goal_detail);
+      if (a.area) a.area.forEach(x => tags.push('alan:' + x));
+      if (a.aptitude) tags.push('eğilim:' + a.aptitude);
+      if (a.level) tags.push('seviye:' + a.level);
+      if (a.modality) tags.push('katılım:' + a.modality);
+      if (a.priority) tags.push('öncelik:' + a.priority);
+      return tags;
+    }
+
+    function updateLogic() {
+      const a = state.answers;
+      const items = [];
+      if (a.goal) items.push(`Ana amaç <strong>${titleFromOption(flow[0], a.goal)}</strong> olarak işaretlendiği için sistem önce bu niyete uygun kurs ailelerini öne alır.`);
+      if (a.goal_detail) items.push(`Amaç detayı seçimi, aynı ana amaç içindeki doğru alt rotayı ayırır. Böylece örneğin hobi ile iş odaklı kurslar karışmaz.`);
+      if (a.area && a.area.length) items.push(`Seçilen alanlar <strong>${a.area.length}</strong> adet olduğu için öneri listesi önce bu alanlarda yoğunlaştırılır, sonra yakın alternatifler eklenir.`);
+      if (a.aptitude) items.push(`Beceri eğilimi cevabı, aynı alanda hangi kurs tipinin daha uygun olduğunu belirler. Örneğin yaratıcı, teknik veya düzen odaklı ayrım yapılır.`);
+      if (a.level) items.push(`Seviye bilgisi, başlangıç kursu ile ileri kursu ayırmak için kullanılır. Yanlış zorluk seviyesindeki kurslar geri plana düşer.`);
+      if (a.modality) items.push(`Katılım biçimi tercihi, gerçek sistemde ilçe, açık kurs, tarih ve kontenjan verileriyle birlikte değerlendirilir.`);
+      if (a.priority) items.push(`Son öncelik, benzer adaylar arasında son sıralamayı belirler. Yakınlık, hız, belge veya online olma gibi farklar burada devreye girer.`);
+
+      els.logicList.innerHTML = items.length ? items.map(i => `<div class="logic-item">${i}</div>`).join('') : `<div class="empty-state">Önce birkaç soru cevaplandığında burada puanlamayı etkileyen mantık maddeleri oluşur.</div>`;
+    }
+
+    function updateProgress() {
+      const total = flow.length;
+      const current = Math.min(state.currentIndex, total);
+      const percent = state.started ? (current / total) * 100 : 0;
+      els.progressBar.style.width = percent + '%';
+      els.stepChip.textContent = state.started ? `${Math.min(current + 1, total)} / ${total} adım` : 'Hazır';
+      if (state.finished) els.stepChip.textContent = 'Tamamlandı';
+    }
+
+    function computeResults() {
+      const a = state.answers;
+      const primaryAreas = a.area || [];
+      return courses.map(course => {
+        let score = 45;
+        const why = [];
+
+        if (a.goal && course.goalFit.includes(a.goal)) {
+          score += 18;
+          why.push('Ana amacınızla uyumlu.');
+        }
+
+        if (primaryAreas.includes(course.area)) {
+          score += 24;
+          why.push('Seçtiğiniz ilgi alanına doğrudan uyuyor.');
+        } else {
+          const nearMap = {
+            digital_code: ['digital_office'],
+            digital_office: ['digital_code'],
+            art_visual: ['art_music', 'maker_craft'],
+            art_music: ['art_visual'],
+            family_child: ['language_social'],
+            health_safety: ['language_social'],
+            maker_craft: ['maker_field', 'service_food'],
+            service_food: ['maker_craft']
+          };
+          const closeAreas = primaryAreas.flatMap(x => nearMap[x] || []);
+          if (closeAreas.includes(course.area)) {
+            score += 10;
+            why.push('Seçtiğiniz alana yakın bir alternatif alan sunuyor.');
+          }
+        }
+
+        if (a.aptitude && course.aptitudeFit.includes(a.aptitude)) {
+          score += 13;
+          why.push('Beceri eğiliminize uygun.');
+        }
+
+        if (a.level && course.levelFit.includes(a.level)) {
+          score += 16;
+          why.push('Seviye uyumu güçlü.');
+        }
+
+        if (a.modality) {
+          const modalityNormalized = a.modality === 'practice' ? 'f2f' : a.modality;
+          if (course.modalityFit.includes(modalityNormalized) || course.priorityFit.includes(a.modality)) {
+            score += 10;
+            why.push('Tercih ettiğiniz katılım biçimine yakın.');
+          }
+        }
+
+        if (a.priority && course.priorityFit.includes(a.priority)) {
+          score += 11;
+          why.push('Son önceliğinizi destekliyor.');
+        }
+
+        if (a.priority === 'certificate' && course.certificate) {
+          score += 6;
+          why.push('Belgelendirme beklentinize cevap verebilir.');
+        }
+
+        if (a.goal === 'hobby' && course.type.includes('Müzik')) {
+          score += 5;
+        }
+
+        if (a.goal_detail) {
+          const detailBoosts = {
+            job_office: ['digital_office'],
+            job_technical: ['digital_code'],
+            job_service: ['service_food'],
+            job_manual: ['maker_craft', 'maker_field'],
+            upskill_tool: ['digital_office', 'digital_code'],
+            upskill_certificate: ['health_safety', 'digital_office', 'service_food'],
+            upskill_specialize: ['digital_code', 'art_visual'],
+            hobby_music: ['art_music'],
+            hobby_art: ['art_visual'],
+            hobby_craft: ['maker_craft'],
+            hobby_nature: ['maker_field'],
+            foundation_digital: ['digital_office'],
+            foundation_language: ['language'],
+            foundation_safety: ['health_safety'],
+            family_child: ['family_child'],
+            social_people: ['language_social'],
+            social_support: ['health_safety', 'language_social']
+          };
+          if ((detailBoosts[a.goal_detail] || []).includes(course.area)) {
+            score += 8;
+            why.push('Amacınızın alt yönüyle de eşleşiyor.');
+          }
+        }
+
+        return {
+          ...course,
+          score,
+          why: [...new Set([...why, ...course.reasons.slice(0, 2)])].slice(0, 5)
+        };
+      }).sort((a, b) => b.score - a.score).slice(0, 5);
+    }
+
+    function renderResults(results) {
+      els.resultGrid.innerHTML = results.map((course, idx) => `
+        <div class="course-card">
+          <div class="course-top">
+            <div>
+              <div class="subtle" style="margin-bottom:6px;">Öneri ${idx + 1}</div>
+              <h3 class="course-title">${course.title}</h3>
+            </div>
+            <div class="score">Uyum skoru: ${course.score}</div>
+          </div>
+          <div class="course-meta">
+            <span class="chip">${course.type}</span>
+            <span class="chip">${course.modality}</span>
+            <span class="chip">${course.duration}</span>
+            <span class="chip">${course.certificate ? 'Belge odaklı' : 'Belge ikincil'}</span>
+          </div>
+          <ul class="reason-list">
+            ${course.why.map(r => `<li>${r}</li>`).join('')}
+          </ul>
+          <div class="actions">
+            <button type="button" class="btn primary js-apply" data-id="${course.id}">Başvur</button>
+            <button type="button" class="btn ghost js-detail" data-id="${course.id}">Detayı Gör</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function finishFlow() {
+      state.finished = true;
+      els.questionContainer.classList.add('hidden');
+      els.resultContainer.classList.remove('hidden');
+      const results = computeResults();
+      renderResults(results);
+      updateProgress();
+      updateLogic();
+      updateSummary();
+      scrollToTop();
+    }
+
+    function loadDemo(type) {
+      startFlow();
+      if (type === 'job') {
+        state.answers = {
+          goal: 'job',
+          goal_detail: 'job_technical',
+          area: ['digital_code', 'digital_office'],
+          aptitude: 'technical',
+          level: 'basic',
+          modality: 'online',
+          priority: 'certificate'
+        };
+        state.selectedAreas = ['digital_code', 'digital_office'];
+      } else {
+        state.answers = {
+          goal: 'hobby',
+          goal_detail: 'hobby_music',
+          area: ['art_music', 'art_visual'],
+          aptitude: 'creative',
+          level: 'none',
+          modality: 'f2f',
+          priority: 'practice'
+        };
+        state.selectedAreas = ['art_music', 'art_visual'];
+      }
+      state.history = Object.keys(state.answers).map(k => ({ id: k, value: state.answers[k] }));
+      state.currentIndex = flow.length;
+      finishFlow();
+    }
+
+    document.addEventListener('click', handleTap, false);
+    document.addEventListener('touchend', handleTap, false);
+
+    document.querySelectorAll('button').forEach(function (b) {
+      b.style.touchAction = 'manipulation';
+      b.style.webkitTapHighlightColor = 'rgba(0,0,0,0.05)';
+      b.style.cursor = 'pointer';
+    });
+  </script>
+</body>
+</html>
